@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\dashboardcont;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MatkulController;
@@ -8,6 +10,19 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+  
+
+Route::middleware(['auth', 'role:admin'])->group(function(){
+
+    Route::get('/register/admin_dosen', [AuthController::class, 'register']);
+    Route::post('/register/admin_dosen', [AuthController::class, 'register_action_dosen']);
+
+    Route::get('/dashboard/admin', [dashboardcont::class, 'index']);
 
     Route::get('/jurusan', [JurusanController::class, 'index']);
     Route::get('/tambah_jurusan', [JurusanController::class, 'tambah']);
@@ -27,7 +42,19 @@ Route::get('/', function () {
     Route::get('/matkul/create', [MatkulController::class, 'create'])->name('matkul.create');
     Route::post('/matkul/create', [MatkulController::class, 'store'])->name('matkul.store');
     Route::get('/matkul/{id}/edit', [MatkulController::class, 'edit'])->name('matkul.edit');
-    Route::put('/matkul/{id}', [MatkulController::class, 'update'])->name('matkul.update');
+    Route::put('/matkul/{id}/edit', [MatkulController::class, 'update'])->name('matkul.update');
     Route::delete('/matkul/{id}', [MatkulController::class, 'destroy'])->name('matkul.destroy');
 
     Route::get('/matkul/get-kelas', [MatkulController::class, 'getKelas'])->name('matkul.getKelas');
+
+    });
+
+Route::middleware(['auth', 'role:dosen'])->group(function() {
+
+        Route::get('/dashboard/dosen', [dashboardcont::class, 'index']);
+});
+
+Route::middleware(['auth'])->group(function(){
+        Route::get('/logout', [AuthController::class, 'logout']);
+    });
+

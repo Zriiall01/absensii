@@ -35,6 +35,7 @@
             <th>Mata Kuliah</th>
             <th>Jurusan</th>
             <th>Kelas & Angkatan</th>
+            <th>sks</th>
             <th>Aksi</th>
         </tr>
     </thead>
@@ -44,16 +45,18 @@
             <tr>
                 <td>{{ $no++ }}</td>
                 <td>{{ $matkul['nama_matkul'] }}</td>
+                <td>{{ $matkul['sks'] }}</td>
                 <td>{{ $matkul['jurusan'] }}</td>
                 <td>
                     @foreach ($matkul['kelas'] as $kelas)
                         <span class="badge bg-info text-dark">{{ $kelas['nama_kelas'] }} ({{ $kelas['angkatan'] }})</span>
                     @endforeach
                 </td>
+                
                 <td>
-                    <a href="{{ url('/edit_matkul?nama=' . urlencode($matkul['nama_matkul']) . '&jurusan=' . urlencode($matkul['jurusan'])) }}"
+                    <a href="/matkul/{{ $matkul['nama_matkul'] }}/edit"
                         class="badge bg-warning text-dark">Edit</a>
-                    <a href="{{ url('/hapus_matkul?nama=' . urlencode($matkul['nama_matkul']) . '&jurusan=' . urlencode($matkul['jurusan'])) }}"
+                    <a href="/matkul/{{ $matkul['nama_matkul'] }}/hapus"
                         onclick="return confirm('Yakin ingin menghapus semua matkul ini?')"
                         class="badge bg-danger text-light">Hapus</a>
                 </td>

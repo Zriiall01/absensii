@@ -22,6 +22,11 @@
         </div>
 
         <div class="mb-3">
+            <label for="nama_matkul" class="form-label">SKS Mata Kuliah</label>
+            <input type="text" name="sks" id="nama_matkut" class="form-control" value="{{ old('sks') }}" required>
+        </div>
+
+        <div class="mb-3">
             <label for="jurusan_id" class="form-label">Jurusan</label>
             <select name="jurusan_id" id="jurusan_id" class="form-select" required>
                 <option value="">-- Pilih Jurusan --</option>

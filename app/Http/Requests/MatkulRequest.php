@@ -23,6 +23,7 @@ class MatkulRequest extends FormRequest
     {
         return [
             'nama_matkul' => 'required|string|max:255',
+            'sks' => 'required|string|max:255',
             'jurusan_id' => 'required|exists:jurusan,jurusan_id',
             'angkatan' => 'required|string',
             'kelas_id' => 'required|array',

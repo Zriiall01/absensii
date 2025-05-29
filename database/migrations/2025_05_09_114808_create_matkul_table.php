@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('matkul', function (Blueprint $table) {
             $table->bigIncrements('matkul_id');
             $table->string('nama_matkul');
+            $table->string('sks');
             $table->unsignedBigInteger('jurusan_id');
             $table->foreign('jurusan_id')->references('jurusan_id')->on('jurusan')->onDelete('cascade');
             $table->unsignedBigInteger('kelas_id');

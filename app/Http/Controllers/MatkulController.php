@@ -25,6 +25,7 @@ class MatkulController extends Controller
         $first = $items->first();
         return [
             'nama_matkul' => $first->nama_matkul,
+            'sks' => $first->sks,
             'jurusan' => $first->jurusan->nama_jurusan,
             'kelas' => $items->map(function ($i) {
                 return [
@@ -55,6 +56,7 @@ class MatkulController extends Controller
         foreach ($request->kelas_id as $kelasId) {
             MatkulModel::create([
                 'nama_matkul' => $request->nama_matkul,
+                'sks' => $request->sks,
                 'jurusan_id' => $request->jurusan_id,
                 'kelas_id' => $kelasId,
             ]);
@@ -76,37 +78,53 @@ class MatkulController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-         $matkul = MatkulModel::with('kelas')->findOrFail($id);
-        $jurusan = JurusanModel::all();
-        // Angkatan bisa kamu ambil dari data kelas yang sudah ada, misal ambil angkatan tertinggi
-        $angkatan = $matkul->kelas->first() ? $matkul->kelas->first()->angkatan : '';
+    public function edit(string $nama_matkul)
+{
+    // Cari berdasarkan nama_matkul, bukan id
+    $matkul = MatkulModel::with('kelas')
+        ->where('nama_matkul', $nama_matkul)
+        ->firstOrFail();
 
-        return view('mahasiswa.matkul.edit', compact('matkul', 'jurusan', 'angkatan'));
-    }
+    $jurusan = JurusanModel::all();
+
+    // Ambil angkatan dari relasi kelas, kalau ada
+    $angkatan = $matkul->kelas->first() ? $matkul->kelas->first()->angkatan : '';
+
+    return view('mahasiswa.matkul.edit', compact('matkul', 'jurusan', 'angkatan'));
+}
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(MatkulRequest $request, string $id)
-    {
-        $matkul = MatkulModel::findOrFail($id);
-        $matkul->nama_matkul = $request->nama_matkul;
-        $matkul->jurusan_id = $request->jurusan_id;
-        $matkul->save();
+    public function update(MatkulRequest $request, string $nama_matkul)
+{
+    // Cari matkul berdasarkan nama_matkul, bukan id
+    $matkul = MatkulModel::where('nama_matkul', $nama_matkul)->firstOrFail();
 
-        // Sync relasi many-to-many dengan kelas
-        $matkul->kelas()->sync($request->kelas_id);
+    $matkul->nama_matkul = $request->nama_matkul;
+    $matkul->sks = $request->sks;
+    $matkul->jurusan_id = $request->jurusan_id;
+    $matkul->save();
 
-        return redirect()->route('matkul.index')->with('success', 'Mata kuliah berhasil diperbarui.');
-    }
+    // Sync relasi many-to-many dengan kelas
+    $matkul->kelas()->sync($request->kelas_id);
+
+    return redirect('/matkul')->with('success', 'Mata kuliah berhasil diperbarui.');
+}
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-    }
+    public function destroy(string $nama_matkul)
+{
+    // Cari matkul berdasarkan nama_matkul
+    $matkul = MatkulModel::where('nama_matkul', $nama_matkul)->firstOrFail();
+
+    // Hapus data matkul
+    $matkul->delete();
+
+    return redirect('/matkul')->with('success', 'Mata kuliah "' . $nama_matkul . '" berhasil dihapus.');
+}
+
 }

@@ -39,7 +39,7 @@
                         class="logo-light h-rem-8 h-rem-md-10" alt="..."></a>
                 <div class="dropdown-divider"></div>
 
-                {{-- @if (auth()->user()->hasRole('admin')) --}}
+                @if (auth()->user()->hasRole('admin'))
 <div class="collapse navbar-collapse overflow-x-hidden" id="sidebarCollapse">
     <ul class="navbar-nav">
         <!-- Dashboards Section -->
@@ -101,7 +101,7 @@
         <i class="bi bi-box-arrow-right me-2"></i> Log out
     </a>
 </div>
-{{-- @endif
+@endif
 
                 @if (auth()->user()->hasRole('mahasiswa'))
                 <div class="collapse navbar-collapse overflow-x-hidden" id="sidebarCollapse">
@@ -182,17 +182,17 @@
                 <a class="dropdown-item d-flex align-items-center" href="/logout">
                     <i class="bi bi-box-arrow-right me-2"></i> Log out
                 </a>
-                @endif --}}
+                @endif
 
             </div>
         </nav>
         <div class="flex-lg-fill overflow-x-auto ps-lg-1 vstack vh-lg-100 position-relative">
             <div class="d-none d-lg-flex py-3">
                 <div class="hstack flex-fill justify-content-end flex-nowrap gap-6 ms-auto px-6 px-xxl-8">
-                    {{-- @if (auth()->user()->hasRole('admin'))
+                    @if (auth()->user()->hasRole('admin'))
                         <a class="btn btn-secondary" href="/register/admin_dosen" role="button">ADD Dosen
                             </a>
-                    @endif --}}
+                    @endif
                     <div class="dropdown">
                         <a href="#" class="nav-link" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-sun-fill"></i>
