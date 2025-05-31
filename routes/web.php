@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\dashboardcont;
+use App\Http\Controllers\DosenController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MatkulController;
@@ -51,7 +52,14 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
 
 Route::middleware(['auth', 'role:dosen'])->group(function() {
 
-        Route::get('/dashboard/dosen', [dashboardcont::class, 'index']);
+        Route::get('/dashboard-dosen', [DosenController::class, 'dashboard'])->name('dosen.dashboard');
+
+Route::get('/data_diri/dosen', [DosenController::class, 'editOrCreate'])->name('dosen.form');
+Route::post('/data_diri/dosen', [DosenController::class, 'storeOrUpdate'])->name('dosen.store_or_update');
+Route::get('/get-kelas', [DosenController::class, 'getKelas'])->name('get.kelas');
+
+
+
 });
 
 Route::middleware(['auth'])->group(function(){

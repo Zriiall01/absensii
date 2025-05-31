@@ -10,6 +10,7 @@ class MatkulModel extends Model
     use HasFactory;
     protected $table = 'matkul';
     protected $guarded = [];
+    protected $primaryKey = 'matkul_id';
 
     public function jurusan()
 {
@@ -20,6 +21,11 @@ public function kelas()
 {
     return $this->belongsTo(KelasModel::class, 'kelas_id', 'kelas_id');
 }
+
+public function dosen()
+    {
+        return $this->hasMany(DosenModel::class, 'jurusan_id');
+    }
 
 
 }

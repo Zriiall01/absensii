@@ -149,27 +149,18 @@
                     <ul class="navbar-nav">
                         <!-- Dashboard Link -->
                         <li class="nav-item my-1">
-                            <a class="nav-link d-flex align-items-center rounded-pill" href="/dashboard/dosen" role="button" aria-expanded="true" aria-controls="sidebar-dashboards">
+                            <a class="nav-link d-flex align-items-center rounded-pill" href="/dashboard-dosen" role="button" aria-expanded="true" aria-controls="sidebar-dashboards">
                                 <i class="bi bi-house-fill"></i>
                                 <span>Dashboards</span>
                                 <span class="badge badge-sm rounded-pill me-n2 bg-success-subtle text-success ms-auto"></span>
                             </a>
                         </li>
             
-                        <!-- Data Diri Link -->
-                        <li class="nav-item my-1">
-                            <a class="nav-link d-flex align-items-center rounded-pill" href="/data_diri/dosen" role="button" aria-expanded="true" aria-controls="sidebar-datadiri">
-                                <i class="bi bi-person-fill"></i>
-                                <span>Data Diri</span>
-                                <span class="badge badge-sm rounded-pill me-n2 bg-success-subtle text-success ms-auto"></span>
-                            </a>
-                        </li>
-            
                         <!-- Pengajuan Skripsi Link -->
                         <li class="nav-item my-1">
-                            <a class="nav-link d-flex align-items-center rounded-pill" href="/skripsii/dosen" role="button" aria-expanded="true" aria-controls="sidebar-skripsi">
+                            <a class="nav-link d-flex align-items-center rounded-pill" href="/absensi/dosen" role="button" aria-expanded="true" aria-controls="sidebar-skripsi">
                                 <i class="bi bi-file-earmark-text"></i>
-                                <span>Skripsi</span>
+                                <span>abzenzi</span>
                                 <span class="badge badge-sm rounded-pill me-n2 bg-warning-subtle text-warning ms-auto"></span>
                             </a>
                         </li>
