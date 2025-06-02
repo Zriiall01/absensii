@@ -44,7 +44,7 @@
     <ul class="navbar-nav">
         <!-- Dashboards Section -->
         <li class="nav-item my-1">
-            <a class="nav-link d-flex align-items-center rounded-pill" href="/dashboard" role="button" aria-expanded="true" aria-controls="sidebar-dashboards">
+            <a class="nav-link d-flex align-items-center rounded-pill" href="/dashboard/admin" role="button" aria-expanded="true" aria-controls="sidebar-dashboards">
                 <i class="bi bi-house-door-fill"></i> <!-- Icon updated -->
                 <span>Dashboards</span>
             </a>
@@ -61,20 +61,6 @@
                     <li><a class="nav-item nav-link" href="/jurusan">Jurusan</a></li>
                     <li><a class="nav-item nav-link" href="/kelas">Kelas</a></li>
                     <li><a class="nav-item nav-link" href="/matkul">Mata Kuliah</a></li>
-                </ul>
-            </div>
-        </li>
-
-        <!-- Dosen Section -->
-        <li class="nav-item my-1">
-            <a class="nav-link d-flex align-items-center rounded-pill" href="#sidebar-account" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebar-account">
-                <i class="bi bi-person-circle"></i> <!-- Icon updated -->
-                <span>Dosen</span>
-            </a>
-            <div class="collapse" id="sidebar-account">
-                <ul class="nav nav-sm flex-column mt-1">
-                    <li class="nav-item"><a href="/dosen/admin" class="nav-link">Dosen</a></li>
-                    <li class="nav-item"><a href="/penentuan" class="nav-link">Penentuan Dosen</a></li>
                 </ul>
             </div>
         </li>
@@ -115,27 +101,22 @@
                             </a>
                         </li>
             
-                        <!-- Data Diri Link -->
-                        <li class="nav-item my-1">
-                            <a class="nav-link d-flex align-items-center rounded-pill" href="/data_diri/mahasiswa" role="button" aria-expanded="true" aria-controls="sidebar-datadiri">
-                                <i class="bi bi-person-fill"></i>
-                                <span>Data Diri</span>
-                                <span class="badge badge-sm rounded-pill me-n2 bg-success-subtle text-success ms-auto"></span>
-                            </a>
-                        </li>
-            
                         <!-- Pengajuan Skripsi Link -->
-                        <li class="nav-item my-1">
-                            <a class="nav-link d-flex align-items-center rounded-pill" href="/skripsi/mahasiswa" role="button" aria-expanded="true" aria-controls="sidebar-skripsi">
-                                <i class="bi bi-file-earmark-text"></i>
-                                <span>Pengajuan Skripsi</span>
-                                <span class="badge badge-sm rounded-pill me-n2 bg-warning-subtle text-warning ms-auto"></span>
-                            </a>
-                        </li>
+                        @foreach($absensisAktif as $absensi)
+    <li class="nav-item my-1">
+        <a class="nav-link" href="/mahasiswa/absensi{{ $absensi->id }}">
+            <i class="bi bi-clock"></i> {{ $absensi->judul }}
+        </a>
+    </li>
+@endforeach
+
                     </ul>
                 </div>
+                
             
                 <div class="dropdown-divider"></div>
+
+            
             
                 <!-- Logout Link -->
                 <a class="dropdown-item d-flex align-items-center" href="/logout">
@@ -158,7 +139,7 @@
             
                         <!-- Pengajuan Skripsi Link -->
                         <li class="nav-item my-1">
-                            <a class="nav-link d-flex align-items-center rounded-pill" href="/absensi/dosen" role="button" aria-expanded="true" aria-controls="sidebar-skripsi">
+                            <a class="nav-link d-flex align-items-center rounded-pill" href="/absensi" role="button" aria-expanded="true" aria-controls="sidebar-skripsi">
                                 <i class="bi bi-file-earmark-text"></i>
                                 <span>abzenzi</span>
                                 <span class="badge badge-sm rounded-pill me-n2 bg-warning-subtle text-warning ms-auto"></span>
@@ -212,6 +193,14 @@
                         <div class="dropdown-menu dropdown-menu-end">
                             <div class="dropdown-header"><span class="d-block text-sm text-muted mb-1">Signed in
                                     as</span>
+                                    @if (auth()->user()->hasRole('dosen'))
+                        <a class="" href="/data_diri/dosen" role="button">Biodata
+                            </a>
+                    @endif
+                    @if (auth()->user()->hasRole('mahasiswa'))
+                        <a class="" href="/mahasiswa/create" role="button">Biodata
+                            </a>
+                    @endif
                                 <span class="d-block text-heading fw-semibold">
                                     {{ auth()->user()->name ?? 'Guest' }}
                                 </span>

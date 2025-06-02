@@ -59,7 +59,7 @@ public function storeOrUpdate(Request $request)
     // Sync kelas
     $dosen->kelas()->sync($request->kelas_id);
 
-    return redirect()->back()->with('success', 'Data dosen berhasil disimpan/diupdate.');
+    return redirect('/dashboard-dosen')->with('success', 'Data dosen berhasil disimpan/diupdate.');
 }
 
 public function getKelas(Request $request)

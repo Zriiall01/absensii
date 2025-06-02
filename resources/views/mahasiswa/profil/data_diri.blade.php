@@ -1,111 +1,159 @@
 @extends('layout.template')
 
 @section('content')
-<div class="container-fluid py-4">
-    <!-- Form Data Diri Mahasiswa -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header text-center">
-                    <h4>Form Data Diri Mahasiswa</h4>
+<div class="container">
+    <h4>{{ $mahasiswa ? 'Edit' : 'Tambah' }} Data Mahasiswa</h4>
+
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <form action="{{ url('/mahasiswa/create') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+
+        <!-- Foto -->
+        <div class="form-group mb-3">
+            <label>Foto</label>
+            @if ($mahasiswa && $mahasiswa->foto)
+                <div class="mb-2">
+                    <img src="{{ asset('gambar/' . $mahasiswa->foto) }}" width="100" alt="Foto Mahasiswa">
                 </div>
-                <div class="card-body">
-                    <form action="" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-group mt-3">
-                            <label for="foto_project" class="label">Foto (16:9)</label>
-                            <div class="form-control h-100 text-center position-relative p-4 p-lg-5">
-                                <div class="product-upload">
-                                    <label for="file-upload" class="file-upload mb-0">
-                                        <span class="d-inline-block wh-110 bg-body-bg rounded-10 position-relative">
-                                            <img id="upload" src="{{ isset($mahasiswa) && $mahasiswa->foto ? asset('gambar/' . $mahasiswa->foto) : asset('admin/assets/images/upload.png') }}" alt="your image" style="width: 300px; height: auto;" />
-                                        </span>
-                                    </label>
-                                    <input id="file-upload" name="foto" onchange="readURL(this);" type="file" accept="image/*" hidden>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Nama Mahasiswa -->
-                        <div class="form-group">
-                            <label for="nama_mahasiswa">Nama Mahasiswa</label>
-                            <input type="text" name="nama_mahasiswa" id="nama_mahasiswa" class="form-control" placeholder="Masukkan nama mahasiswa" value="{{ old('nama_mahasiswa', $mahasiswa->nama_mahasiswa ?? '') }}" required>
-                        </div>
-
-                        <!-- NPM -->
-                        <div class="form-group">
-                            <label for="npm_mahasiswa">NPM</label>
-                            <input type="text" name="npm_mahasiswa" id="npm_mahasiswa" class="form-control" placeholder="Masukkan NPM" value="{{ old('npm_mahasiswa', $mahasiswa->npm_mahasiswa ?? '') }}" required>
-                        </div>
-
-                        <!-- Jurusan -->
-                        <div class="form-group">
-                            <label for="jurusan_id">Jurusan</label>
-                            <select name="jurusan_id" id="jurusan_id" class="form-control" required>
-                                <option value="" disabled selected>Pilih Jurusan</option>
-                                @foreach($jurusan as $jrs)
-                                    <option value="{{ $jrs->jurusan_id }}" {{ (isset($mahasiswa) && $mahasiswa->jurusan_id == $jrs->jurusan_id) ? 'selected' : '' }}>
-                                        {{ $jrs->jurusan }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label>Gender:</label>
-                        </div>
-                        <div class="mb-3">
-                            <input type="radio" id="gender_L" name="gender" value="L" {{ (isset($mahasiswa) && $mahasiswa->gender == 'L') ? 'checked' : '' }}>
-                            <label for="gender_L">Laki-laki</label>
-                            <input type="radio" id="gender_P" name="gender" value="P" {{ (isset($mahasiswa) && $mahasiswa->gender == 'P') ? 'checked' : '' }}>
-                            <label for="gender_P">Perempuan</label>
-                        </div>
-
-                        <!-- Alamat -->
-                        <div class="form-group">
-                            <label for="alamat">Alamat</label>
-                            <textarea name="alamat" id="alamat" class="form-control" placeholder="Masukkan alamat" rows="3" required>{{ old('alamat', $mahasiswa->alamat ?? '') }}</textarea>
-                        </div>
-
-                        <!-- Tempat Lahir -->
-                        <div class="form-group">
-                            <label for="tempat_lahir">Tempat Lahir</label>
-                            <input type="text" name="tempat_lahir" id="tempat_lahir" class="form-control" placeholder="Masukkan tempat lahir" value="{{ old('tempat_lahir', $mahasiswa->tempat_lahir ?? '') }}" required>
-                        </div>
-
-                        <!-- Tanggal Lahir -->
-                        <div class="form-group">
-                            <label for="tanggal_lahir">Tanggal Lahir</label>
-                            <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="form-control" value="{{ old('tanggal_lahir', $mahasiswa->tanggal_lahir ?? '') }}" required>
-                        </div>
-
-                        <!-- ID User -->
-                        <input type="hidden" name="users" value="{{ auth()->id() }}">
-
-                        <!-- Tombol Submit -->
-                        <button type="submit" class="btn btn-primary">
-                            {{ isset($mahasiswa) ? 'Simpan Edit' : 'Simpan Data' }}
-                        </button>                        
-                    </form>
-                </div>
-            </div>
+            @endif
+            <input type="file" name="foto" class="form-control">
+            @error('foto') <small class="text-danger">{{ $message }}</small> @enderror
         </div>
-    </div>
+
+        <!-- Nama -->
+        <div class="form-group mb-3">
+            <label>Nama Mahasiswa</label>
+            <input type="text" name="nama_mahasiswa" class="form-control" 
+                   value="{{ old('nama_mahasiswa', $mahasiswa->nama_mahasiswa ?? '') }}">
+            @error('nama_mahasiswa') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+
+        <!-- Gender -->
+        <div class="form-group mb-3">
+            <label>Gender</label>
+            <select name="gender" class="form-control">
+                <option value="L" {{ (old('gender', $mahasiswa->gender ?? '') == 'L') ? 'selected' : '' }}>Laki-laki</option>
+                <option value="P" {{ (old('gender', $mahasiswa->gender ?? '') == 'P') ? 'selected' : '' }}>Perempuan</option>
+            </select>
+            @error('gender') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+
+        <!-- Alamat -->
+        <div class="form-group mb-3">
+            <label>Alamat</label>
+            <textarea name="alamat" class="form-control">{{ old('alamat', $mahasiswa->alamat ?? '') }}</textarea>
+            @error('alamat') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+
+        <!-- Tempat Lahir -->
+        <div class="form-group mb-3">
+            <label>Tempat Lahir</label>
+            <input type="text" name="tempat_lahir" class="form-control" 
+                   value="{{ old('tempat_lahir', $mahasiswa->tempat_lahir ?? '') }}">
+            @error('tempat_lahir') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+
+        <!-- Tanggal Lahir -->
+        <div class="form-group mb-3">
+            <label>Tanggal Lahir</label>
+            <input type="date" name="tanggal_lahir" class="form-control" 
+                   value="{{ old('tanggal_lahir', $mahasiswa->tanggal_lahir ?? '') }}">
+            @error('tanggal_lahir') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+
+        <!-- NPM -->
+        <div class="form-group mb-3">
+            <label>NPM</label>
+            <input type="text" name="npm_mahasiswa" class="form-control" 
+                   value="{{ old('npm_mahasiswa', $mahasiswa->npm_mahasiswa ?? '') }}">
+            @error('npm_mahasiswa') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+
+        <!-- Jurusan -->
+        <div class="form-group mb-3">
+            <label>Jurusan</label>
+            <select name="jurusan_id" id="jurusan_id" class="form-control">
+                <option value="">-- Pilih Jurusan --</option>
+                @foreach ($jurusans as $jurusan)
+                    <option value="{{ $jurusan->jurusan_id }}" 
+                        {{ (old('jurusan_id', $mahasiswa->jurusan_id ?? '') == $jurusan->jurusan_id) ? 'selected' : '' }}>
+                        {{ $jurusan->nama_jurusan }}
+                    </option>
+                @endforeach
+            </select>
+            @error('jurusan_id') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+
+        <!-- Kelas -->
+        <div class="form-group mb-3">
+            <label>Kelas</label>
+            <select name="kelas_id" id="kelas_id" class="form-control">
+                <option value="">-- Pilih Kelas --</option>
+                @if ($kelasList ?? false)
+                    @foreach ($kelasList as $kelas)
+                        <option value="{{ $kelas->kelas_id }}" 
+                            {{ (old('kelas_id', $mahasiswa->kelas_id ?? '') == $kelas->kelas_id) ? 'selected' : '' }}>
+                            {{ $kelas->nama_kelas }}
+                        </option>
+                    @endforeach
+                @endif
+            </select>
+            @error('kelas_id') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+
+        <!-- Mata Kuliah -->
+        <div class="form-group mb-3">
+            <label>Mata Kuliah</label>
+            <select name="matkuls[]" id="matkuls" class="form-control" multiple>
+                @if ($matkulList ?? false)
+                    @foreach ($matkulList as $matkul)
+                        <option value="{{ $matkul->matkul_id }}" 
+                            {{ (collect(old('matkuls', $mahasiswa->matkuls->pluck('matkul_id') ?? []))->contains($matkul->matkul_id)) ? 'selected' : '' }}>
+                            {{ $matkul->nama_matkul }}
+                        </option>
+                    @endforeach
+                @endif
+            </select>
+            @error('matkuls') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+
+        <button type="submit" class="btn btn-primary">Simpan</button>
+    </form>
 </div>
 
+<!-- Dynamic Dropdown AJAX -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+$(document).ready(function() {
+    $('#jurusan_id').on('change', function() {
+        var jurusanId = $(this).val();
+        $('#kelas_id').empty().append('<option value="">-- Pilih Kelas --</option>');
+        $('#matkuls').empty();
 
-            reader.onload = function(e) {
-                // Perbarui atribut src dengan data URL dari file
-                document.getElementById('upload').src = e.target.result;
-            };
-
-            // Baca file yang diunggah
-            reader.readAsDataURL(input.files[0]);
+        if (jurusanId) {
+            $.get('/getKelas/' + jurusanId, function(data) {
+                $.each(data, function(key, value) {
+                    $('#kelas_id').append('<option value="' + value.kelas_id + '">' + value.nama_kelas + '</option>');
+                });
+            });
         }
-    }
+    });
+
+    $('#kelas_id').on('change', function() {
+        var kelasId = $(this).val();
+        $('#matkuls').empty();
+
+        if (kelasId) {
+            $.get('/getMatkul/' + kelasId, function(data) {
+                $.each(data, function(key, value) {
+                    $('#matkuls').append('<option value="' + value.matkul_id + '">' + value.nama_matkul + '</option>');
+                });
+            });
+        }
+    });
+});
 </script>
 @endsection

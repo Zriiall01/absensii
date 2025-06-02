@@ -1,20 +1,27 @@
 <?php
 
+use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\AbsensiMahasiswaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\dashboardcont;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\MatkulController;
+use App\Http\Controllers\Usercontroller;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landing_page.index');
 });
 
-    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware(['guest'])->group(function(){
+    Route::get('/login', [AuthController::class, 'showlogin']);
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
+    Route::get('/register/mahasiswa', [AuthController::class, 'register']);
+    Route::post('/register/mahasiswa', [AuthController::class, 'register_action_mahasiswa']);
+  });
 
   
 
@@ -22,6 +29,9 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
 
     Route::get('/register/admin_dosen', [AuthController::class, 'register']);
     Route::post('/register/admin_dosen', [AuthController::class, 'register_action_dosen']);
+
+    Route::get('/user', [Usercontroller::class, 'index']);
+    Route::get('/delete_user/{id}', [Usercontroller::class, 'destroy']);
 
     Route::get('/dashboard/admin', [dashboardcont::class, 'index']);
 
@@ -59,8 +69,30 @@ Route::post('/data_diri/dosen', [DosenController::class, 'storeOrUpdate'])->name
 Route::get('/get-kelas', [DosenController::class, 'getKelas'])->name('get.kelas');
 
 
+Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index'); // daftar absensi (filter by tanggal)
+    Route::get('/absensi/create', [AbsensiController::class, 'create'])->name('absensi.create'); // form buat absensi
+    Route::post('/absensi', [AbsensiController::class, 'store'])->name('absensi.store'); // simpan absensi
+    Route::get('/absensi/{id}', [AbsensiController::class, 'show'])->name('absensi.show');
+    Route::get('/absensi/{id}/download', [AbsensiController::class, 'download'])->name('absensi.download');
+    Route::delete('/absensi/{id}', [AbsensiController::class, 'destroy'])->name('absensi.destroy');
 
 });
+
+
+
+Route::middleware(['auth', 'role:mahasiswa'])->group(function(){
+        Route::get('/dashboard/mahasiswa', [DashboardCont::class, 'mahasiswaDashboard']);
+
+        Route::get('/mahasiswa/create', [MahasiswaController::class, 'create'])->name('mahasiswa.create');
+Route::post('/mahasiswa/create', [MahasiswaController::class, 'storeOrUpdate']);
+Route::get('/getKelas/{jurusanId}', [MahasiswaController::class, 'getKelas']);
+Route::get('/getMatkul/{kelasId}', [MahasiswaController::class, 'getMatkul']);
+
+Route::get('/mahasiswa/absensi', [AbsensiMahasiswaController::class, 'index'])->name('mahasiswa.absensi.index');
+    Route::get('/mahasiswa/absensi{id}', [AbsensiMahasiswaController::class, 'show'])->name('mahasiswa.absensi.show');
+    Route::post('/mahasiswa/absensi{id}', [AbsensiMahasiswaController::class, 'store'])->name('mahasiswa.absensi.store');
+    });
+
 
 Route::middleware(['auth'])->group(function(){
         Route::get('/logout', [AuthController::class, 'logout']);

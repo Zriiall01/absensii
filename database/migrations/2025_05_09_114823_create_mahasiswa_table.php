@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('mahasiswa', function (Blueprint $table) {
-            $table->increments('mahasiswa_id');
+            $table->bigIncrements('mahasiswa_id');
             $table->string('foto');
             $table->string('nama_mahasiswa');
             $table->enum('gender', ['L', 'P'])->default('L');
@@ -24,8 +24,6 @@ return new class extends Migration
             $table->foreign('jurusan_id')->references('jurusan_id')->on('jurusan')->onDelete('cascade');
             $table->unsignedBigInteger('kelas_id');
             $table->foreign('kelas_id')->references('kelas_id')->on('kelas')->onDelete('cascade');
-            $table->unsignedBigInteger('matkul_id');
-            $table->foreign('matkul_id')->references('matkul_id')->on('matkul')->onDelete('cascade');
             $table->unsignedBigInteger('users');
             $table->foreign('users')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

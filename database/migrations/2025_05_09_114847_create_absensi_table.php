@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('absensi', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        Schema::create('absensi_mahasiswa', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('absensi_id')->constrained('absensis');
+    $table->foreignId('mahasiswa_id')->constrained('users'); // Relasi ke user mahasiswa
+    $table->timestamp('waktu_absen')->nullable();
+    $table->decimal('latitude', 10, 7)->nullable();
+    $table->decimal('longitude', 10, 7)->nullable();
+    $table->timestamps();
+});
     }
 
     /**
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('absensi');
+        Schema::dropIfExists('absensi_mahasiswa');
     }
 };
