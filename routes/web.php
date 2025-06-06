@@ -29,10 +29,10 @@ Route::middleware(['guest'])->group(function(){
     Route::post('/register/mahasiswa', [AuthController::class, 'register_action_mahasiswa']);
 
     Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm']);
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
 
-Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+    Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
   });
 
   
@@ -74,14 +74,14 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
 
 Route::middleware(['auth', 'role:dosen'])->group(function() {
 
-        Route::get('/dashboard-dosen', [DosenController::class, 'dashboard'])->name('dosen.dashboard');
+    Route::get('/dashboard-dosen', [DosenController::class, 'dashboard'])->name('dosen.dashboard');
 
-Route::get('/data_diri/dosen', [DosenController::class, 'editOrCreate'])->name('dosen.form');
-Route::post('/data_diri/dosen', [DosenController::class, 'storeOrUpdate'])->name('dosen.store_or_update');
-Route::get('/get-kelas', [DosenController::class, 'getKelas'])->name('get.kelas');
+    Route::get('/data_diri/dosen', [DosenController::class, 'editOrCreate'])->name('dosen.form');
+    Route::post('/data_diri/dosen', [DosenController::class, 'storeOrUpdate'])->name('dosen.store_or_update');
+    Route::get('/get-kelas', [DosenController::class, 'getKelas'])->name('get.kelas');
 
 
-Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index'); // daftar absensi (filter by tanggal)
+    Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index'); // daftar absensi (filter by tanggal)
     Route::get('/absensi/create', [AbsensiController::class, 'create'])->name('absensi.create'); // form buat absensi
     Route::post('/absensi', [AbsensiController::class, 'store'])->name('absensi.store'); // simpan absensi
     Route::get('/absensi/{id}', [AbsensiController::class, 'show'])->name('absensi.show');
@@ -95,12 +95,12 @@ Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index
 
 
 Route::middleware(['auth', 'role:mahasiswa'])->group(function(){
-        Route::get('/dashboard/mahasiswa', [DashboardCont::class, 'mahasiswaDashboard']);
+    Route::get('/dashboard/mahasiswa', [DashboardCont::class, 'mahasiswaDashboard']);
 
-        Route::get('/mahasiswa/create', [MahasiswaController::class, 'create'])->name('mahasiswa.create');
-Route::post('/mahasiswa/create', [MahasiswaController::class, 'storeOrUpdate']);
-Route::get('/getKelas/{jurusanId}', [MahasiswaController::class, 'getKelas']);
-Route::get('/getMatkul/{kelasId}', [MahasiswaController::class, 'getMatkul']);
+    Route::get('/mahasiswa/create', [MahasiswaController::class, 'create'])->name('mahasiswa.create');
+    Route::post('/mahasiswa/create', [MahasiswaController::class, 'storeOrUpdate']);
+    Route::get('/getKelas/{jurusanId}', [MahasiswaController::class, 'getKelas']);
+    Route::get('/getMatkul/{kelasId}', [MahasiswaController::class, 'getMatkul']);
 
 // Route::get('/mahasiswa/absensi', [AbsensiMahasiswaController::class, 'index'])->name('mahasiswa.absensi.index');
     Route::get('/mahasiswa/absensi{id}', [AbsensiMahasiswaController::class, 'show'])->name('mahasiswa.absensi.show');

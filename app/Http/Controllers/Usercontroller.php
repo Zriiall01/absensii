@@ -3,11 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class Usercontroller extends Controller
 {
-    public function index(){
-        $user = User::all();
+    public function index(Request $request)
+    {
+        $role = $request->input('role');
+
+        if ($role) {
+            // Pakai Spatie untuk ambil user sesuai role
+            $user = User::role($role)->get();
+        } else {
+            $user = User::all();
+        }
+
         return view('user', compact('user'));
     }
 

@@ -22,7 +22,7 @@
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $jrs->nama_jurusan }}</td>
-                                    <td>{{ $jrs->kode_jurusan ?? '-' }}</td>
+                                    <td>{{ $jrs->jurusan_id ?? '-' }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
