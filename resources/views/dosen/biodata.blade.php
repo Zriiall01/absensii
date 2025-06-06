@@ -14,10 +14,12 @@
         @endif
 
         <div class="form-group mb-3">
-            <label>Nama Dosen</label>
-            <input type="text" name="nama_dosen" class="form-control" 
-                value="{{ isset($dosen) ? $dosen->nama_dosen : old('nama_dosen') }}" required>
-        </div>
+    <label>Nama Dosen</label>
+    <input type="text" class="form-control" 
+           value="{{ auth()->user()->name }}" readonly>
+</div>
+
+
 
         <div class="form-group mb-3">
             <label>NIP</label>

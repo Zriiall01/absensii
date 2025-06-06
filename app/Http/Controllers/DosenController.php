@@ -34,7 +34,7 @@ class DosenController extends Controller
 public function storeOrUpdate(Request $request)
 {
     $request->validate([
-        'nama_dosen' => 'required|string|max:255',
+        // nama_dosen dihapus dari validasi!
         'nip' => 'required|string|max:20|unique:dosen,nip,' . (auth()->user()->dosen->dosen_id ?? 'NULL') . ',dosen_id',
         'jurusan_id' => 'required|exists:jurusan,jurusan_id',
         'matkul_id' => 'required|exists:matkul,matkul_id',
@@ -42,7 +42,7 @@ public function storeOrUpdate(Request $request)
         'kelas_id.*' => 'exists:kelas,kelas_id',
     ]);
 
-    // Cek apakah data dosen sudah ada
+    // Cari data dosen user login
     $dosen = DosenModel::where('users', auth()->id())->first();
 
     if (!$dosen) {
@@ -50,7 +50,8 @@ public function storeOrUpdate(Request $request)
         $dosen->users = auth()->id();
     }
 
-    $dosen->nama_dosen = $request->nama_dosen;
+    // Nama dosen otomatis ambil dari username user yang login
+    $dosen->nama_dosen = auth()->user()->name;
     $dosen->nip = $request->nip;
     $dosen->jurusan_id = $request->jurusan_id;
     $dosen->matkul_id = $request->matkul_id;
@@ -76,5 +77,6 @@ public function getKelas(Request $request)
 
     return response()->json($kelas);
 }
+
 
 }

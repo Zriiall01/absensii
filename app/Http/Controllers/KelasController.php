@@ -12,17 +12,22 @@ class KelasController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $kelas = KelasModel::with('jurusan')
-                ->orderBy('jurusan_id')   // urut berdasarkan jurusan
-                ->orderBy('angkatan')     // lalu urut berdasarkan angkatan
-                ->get();
+         $jurusanList = JurusanModel::all();
+
+    // Kalau ada filter jurusan
+    if ($request->has('jurusan_id') && $request->jurusan_id != '') {
+        $kelas = KelasModel::where('jurusan_id', $request->jurusan_id)->get();
+        $selectedJurusan = $request->jurusan_id;
+    } else {
+        $kelas = KelasModel::all();
+        $selectedJurusan = null;
+    }
 
     $no = 1;
 
-
-        return view('mahasiswa.kelas.kelas', compact('kelas', 'no'));
+        return view('mahasiswa.kelas.kelas', compact('kelas', 'jurusanList', 'selectedJurusan', 'no'));
     }
 
     /**

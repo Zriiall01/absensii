@@ -11,11 +11,13 @@
     <title>Satoshi – Web3 and Finance Dashboard Theme</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/assets/css/main.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/assets/css/utility.css">
-    <link rel="stylesheet" href="../../cdn.jsdelivr.net/npm/bootstrap-icons%401.10.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+
     <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f=satoshi@900,700,500,300,401,400&amp;display=swap">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css"
-        rel="stylesheet">
-    <script defer="defer" data-domain="satoshi.webpixels.io" src="../../plausible.io/js/script.outbound-links.js"></script>
+    
+
+
+
 </head>
 
 <body class="bg-body-tertiary">
@@ -100,15 +102,7 @@
                                 <span class="badge badge-sm rounded-pill me-n2 bg-success-subtle text-success ms-auto"></span>
                             </a>
                         </li>
-            
-                        <!-- Pengajuan Skripsi Link -->
-                        @foreach($absensisAktif as $absensi)
-    <li class="nav-item my-1">
-        <a class="nav-link" href="/mahasiswa/absensi{{ $absensi->id }}">
-            <i class="bi bi-clock"></i> {{ $absensi->judul }}
-        </a>
-    </li>
-@endforeach
+
 
                     </ul>
                 </div>
@@ -222,7 +216,7 @@
             </div>
         </div>
     </div>
-    <script src="../../cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="{{ asset('admin') }}/assets/js/main.js"></script>
     <script src="{{ asset('admin') }}/assets/js/switcher.js"></script>
 </body>

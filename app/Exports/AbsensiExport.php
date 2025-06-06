@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -16,14 +15,42 @@ class AbsensiExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        return $this->absensi->mahasiswaAbsensi->map(function ($mahasiswaAbsen) {
-            return [
-                'Nama Mahasiswa' => $mahasiswaAbsen->mahasiswa->name,
+        $rows = collect();
+
+        // Hadir
+        foreach ($this->absensi->mahasiswaAbsensi ?? [] as $mahasiswaAbsen) {
+            $rows->push([
+                'Nama Mahasiswa' => optional($mahasiswaAbsen->mahasiswa)->name ?? '-',
                 'Waktu Absen' => $mahasiswaAbsen->waktu_absen,
                 'Latitude' => $mahasiswaAbsen->latitude,
                 'Longitude' => $mahasiswaAbsen->longitude,
-            ];
-        });
+                'Keterangan' => 'Hadir',
+            ]);
+        }
+
+        // Izin
+        foreach ($this->absensi->izinMahasiswa ?? [] as $izin) {
+            $rows->push([
+                'Nama Mahasiswa' => optional($izin->mahasiswa)->name ?? '-',
+                'Waktu Absen' => '-',
+                'Latitude' => '-',
+                'Longitude' => '-',
+                'Keterangan' => 'Izin',
+            ]);
+        }
+
+        // Sakit
+        foreach ($this->absensi->sakitMahasiswa ?? [] as $sakit) {
+            $rows->push([
+                'Nama Mahasiswa' => optional($sakit->mahasiswa)->name ?? '-',
+                'Waktu Absen' => '-',
+                'Latitude' => '-',
+                'Longitude' => '-',
+                'Keterangan' => 'Sakit',
+            ]);
+        }
+
+        return $rows;
     }
 
     public function headings(): array
@@ -33,7 +60,7 @@ class AbsensiExport implements FromCollection, WithHeadings
             'Waktu Absen',
             'Latitude',
             'Longitude',
+            'Keterangan',
         ];
     }
 }
-

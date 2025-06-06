@@ -2,13 +2,19 @@
 
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\AbsensiMahasiswaController;
+use App\Http\Controllers\Auth\ForgotPasswordController as AuthForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController as AuthResetPasswordController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\dashboardcont;
 use App\Http\Controllers\DosenController;
+use App\Http\Controllers\EmailController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\MahasiswaAbsensiController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\MatkulController;
+use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\Usercontroller;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +27,12 @@ Route::middleware(['guest'])->group(function(){
     Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::get('/register/mahasiswa', [AuthController::class, 'register']);
     Route::post('/register/mahasiswa', [AuthController::class, 'register_action_mahasiswa']);
+
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm']);
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
   });
 
   
@@ -42,7 +54,7 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::post('/edit_jrs/{id}/edit', [JurusanController::class, 'edit_action']);
     Route::get('/hapus_jrs/{id}/hapus', [JurusanController::class, 'hapus']);
 
-    Route::get('/kelas', [KelasController::class, 'index']);
+    Route::get('/kelas', [KelasController::class, 'index'])->name('kelas.index');
     Route::get('/tambah_kelas', [KelasController::class, 'create']);
     Route::post('/tambah_kelas', [KelasController::class, 'store']);
     Route::get('/edit_kelas/{id}/edit', [KelasController::class, 'edit']);
@@ -75,6 +87,8 @@ Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index
     Route::get('/absensi/{id}', [AbsensiController::class, 'show'])->name('absensi.show');
     Route::get('/absensi/{id}/download', [AbsensiController::class, 'download'])->name('absensi.download');
     Route::delete('/absensi/{id}', [AbsensiController::class, 'destroy'])->name('absensi.destroy');
+    Route::get('/get-kelas', [AbsensiController::class, 'getKelas']);
+
 
 });
 
@@ -88,9 +102,13 @@ Route::post('/mahasiswa/create', [MahasiswaController::class, 'storeOrUpdate']);
 Route::get('/getKelas/{jurusanId}', [MahasiswaController::class, 'getKelas']);
 Route::get('/getMatkul/{kelasId}', [MahasiswaController::class, 'getMatkul']);
 
-Route::get('/mahasiswa/absensi', [AbsensiMahasiswaController::class, 'index'])->name('mahasiswa.absensi.index');
+// Route::get('/mahasiswa/absensi', [AbsensiMahasiswaController::class, 'index'])->name('mahasiswa.absensi.index');
     Route::get('/mahasiswa/absensi{id}', [AbsensiMahasiswaController::class, 'show'])->name('mahasiswa.absensi.show');
     Route::post('/mahasiswa/absensi{id}', [AbsensiMahasiswaController::class, 'store'])->name('mahasiswa.absensi.store');
+    Route::get('/mahasiswa/absensi/{id}/izin', [MahasiswaAbsensiController::class, 'izinForm'])->name('mahasiswa.absensi.izin.form');
+    Route::post('/mahasiswa/absensi/{id}/izin', [MahasiswaAbsensiController::class, 'izinSubmit'])->name('mahasiswa.absensi.izin.submit');
+    Route::get('/mahasiswa/absensi/{id}/sakit', [MahasiswaAbsensiController::class, 'sakitForm'])->name('mahasiswa.absensi.sakit.form');
+    Route::post('/mahasiswa/absensi/{id}/sakit', [MahasiswaAbsensiController::class, 'sakitSubmit'])->name('mahasiswa.absensi.sakit.submit');
     });
 
 

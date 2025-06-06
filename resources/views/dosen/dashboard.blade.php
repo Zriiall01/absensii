@@ -9,7 +9,7 @@
             Belum ada data dosen yang diinput oleh akun ini.
         </div>
     @else
-        <div class="card mb-3">
+        {{-- <div class="card mb-3">
             <div class="card-body">
                 <h5 class="card-title">{{ $dosen->nama_dosen }}</h5>
                 <p class="card-text">
@@ -23,7 +23,7 @@
                     Edit Data
                 </a>
             </div>
-        </div>
+        </div> --}}
 
         <h5>Kelas yang Diampu:</h5>
         <ul class="list-group">

@@ -124,10 +124,15 @@
     </form>
 </div>
 
-<!-- Dynamic Dropdown AJAX -->
+<!-- Tambahkan CSS Flatpickr -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!-- Script jQuery & AJAX & Flatpickr -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
 $(document).ready(function() {
+    // Dynamic Dropdown
     $('#jurusan_id').on('change', function() {
         var jurusanId = $(this).val();
         $('#kelas_id').empty().append('<option value="">-- Pilih Kelas --</option>');
@@ -153,6 +158,14 @@ $(document).ready(function() {
                 });
             });
         }
+    });
+
+    // Inisialisasi Flatpickr untuk input tanggal lahir
+    flatpickr("input[name='tanggal_lahir']", {
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "d-m-Y",
+        allowInput: true
     });
 });
 </script>

@@ -21,4 +21,21 @@ class AbsensiModel extends Model
     {
         return $this->belongsTo(User::class, 'dosen_id');
     }
+
+public function kelas()
+{
+    return $this->belongsToMany(KelasModel::class, 'absensi_kelas', 'absensi_id', 'kelas_id');
+}
+
+
+public function izinMahasiswa()
+{
+    return $this->hasMany(IzinModel::class, 'absensi_id');
+}
+
+public function sakitMahasiswa()
+{
+    return $this->hasMany(SakitModel::class, 'absensi_id');
+}
+
 }

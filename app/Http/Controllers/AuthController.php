@@ -68,7 +68,7 @@ class AuthController extends Controller
 
         $user->assignRole('dosen');
 
-        return redirect('/dashboard')->with('success', 'Berhasil Menjadi Karyawan');
+        return redirect('/dashboard/admin')->with('success', 'Berhasil Menjadi Karyawan');
     }
 
     public function register_action_mahasiswa(Request $request){

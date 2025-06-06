@@ -37,18 +37,54 @@ class dashboardcont extends Controller
 
 public function mahasiswaDashboard()
 {
-    $user = auth()->user();
+    $mahasiswaId = auth()->id();
 
-    // Ambil data mahasiswa yang terhubung dgn user login
-    $mahasiswa = MahasiswaModel::where('users', $user->id)->with('user', 'jurusan', 'kelas', 'matkuls')->first();
+    // Semua absensi aktif
+    $absensisAktifSemua = AbsensiModel::where('waktu_selesai', '>=', now())->get();
 
-    // Cek apakah ada absen yang belum diisi
-    // Ini contoh logika (bisa sesuaikan dgn table absensi kamu!)
-    $absensisAktif = AbsensiModel::where('waktu_mulai', '<=', now())
-            ->where('waktu_selesai', '>=', now())
-            ->get();
+    // Absensi yang sudah diisi oleh mahasiswa, dengan status dan info
+    // Misal kamu punya relasi ke tabel hadir, izin, sakit, tinggal cari yang sudah ada recordnya
 
-    return view('mahasiswa.dasboard', compact('mahasiswa', 'absensisAktif'));
+    $absensisSudahIsi = collect();
+
+    foreach ($absensisAktifSemua as $absensi) {
+        // Cek apakah mahasiswa sudah isi absen hadir
+        $hadir = $absensi->mahasiswaAbsensi()->where('mahasiswa_id', $mahasiswaId)->first();
+        if ($hadir) {
+            $hadir->status = 'hadir';
+            $absensisSudahIsi->push($hadir);
+            continue;
+        }
+
+        // Cek izin
+        $izin = $absensi->izinMahasiswa()->where('mahasiswa_id', $mahasiswaId)->first();
+        if ($izin) {
+            $izin->status = 'izin';
+            $absensisSudahIsi->push($izin);
+            continue;
+        }
+
+        // Cek sakit
+        $sakit = $absensi->sakitMahasiswa()->where('mahasiswa_id', $mahasiswaId)->first();
+        if ($sakit) {
+            $sakit->status = 'sakit';
+            $absensisSudahIsi->push($sakit);
+            continue;
+        }
+    }
+
+    // Filter absensi yang belum diisi
+    $absensisSudahIsiIds = $absensisSudahIsi->pluck('absensi_id')->toArray();
+
+    $absensisAktif = $absensisAktifSemua->filter(function ($item) use ($absensisSudahIsiIds) {
+        return !in_array($item->id, $absensisSudahIsiIds);
+    });
+
+    return view('mahasiswa.dasboard', [
+        'mahasiswa' => auth()->user()->mahasiswa, // contoh data mahasiswa
+        'absensisAktif' => $absensisAktif,
+        'absensisSudahIsi' => $absensisSudahIsi,
+    ]);
 }
 
 }
